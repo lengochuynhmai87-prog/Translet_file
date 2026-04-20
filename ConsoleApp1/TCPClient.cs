@@ -8,7 +8,7 @@ namespace ConsoleApp1
     {
         public Socket? sckClient;
         private FileStream? fs;
-        public static int BUFFERSIZE = 8192;
+        public static int BUFFERSIZE = 65536;
         public byte[] buffer = new byte[BUFFERSIZE];
         public long currentFrame = 0;
         public long numFrame = 0;
@@ -30,7 +30,7 @@ namespace ConsoleApp1
 
         public void SendFile(string path)
         {
-            if(sckClient == null || !sckClient.Connected)
+            if (sckClient == null || !sckClient.Connected)
             {
                 Console.WriteLine("Chua ket noi");
                 return;
@@ -73,7 +73,7 @@ namespace ConsoleApp1
         private void OnChunkSend(IAsyncResult ar)
         {
             sckClient.EndSend(ar);
-           
+
             SendNextChunk();
         }
     }

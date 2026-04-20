@@ -19,11 +19,10 @@ namespace ConsoleApp1
                 Console.WriteLine("Nhap path");
                 string path = Console.ReadLine(); //lấy trên ofd
                 client.SendFile(path);
-                sever.rcv();
             }
 
-            
+
         }
-        
+
     }
 }
