@@ -140,7 +140,7 @@ namespace WinFormsApp1
                 countReceive = 0;
                 totalReceive = 0;
 
-                f.richTextBox2.Text = "Đã nhận " + f.textBox4.Text + "\n";
+                f.richTextBox2.Text += "Đã nhận " + f.textBox4.Text + "\n";
 
                 Console.WriteLine("Đã nhận file thành công!");
             }

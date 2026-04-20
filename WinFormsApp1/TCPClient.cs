@@ -72,7 +72,7 @@ namespace WinFormsApp1
             }
 
             isSending = false;
-            f.richTextBox2.Text = "Đã gửi xong " + f.textBox4.Text + "\n";
+            f.richTextBox2.Text += "Đã gửi xong " + f.textBox4.Text + "\n";
             Console.WriteLine("gui xong");
         }
 
