@@ -2,37 +2,73 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 
-namespace ConsoleApp1
+namespace WinFormsApp1
 {
     public class TCPServer
     {
-        public static Socket? sckClient, sckSever;
-        private FileStream? fs;
+        public Socket? sckClient, sckSever;
+        public Form1 f;
+        public FileStream? fs;
         public static int BUFFERSIZE = 65536;
+        public static int port = 9999;
         public byte[] buffer = new byte[BUFFERSIZE];
         public string Folder = "Receive_File";
         public bool isHeader = true;
         public long countReceive = 0;
         public long totalReceive = 0;
+
+        public static string GetLocalIPAddress()
+        {
+            var host = Dns.GetHostEntry(Dns.GetHostName());
+
+            foreach (var ip in host.AddressList)
+            {
+                if (ip.AddressFamily == AddressFamily.InterNetwork) // IPv4
+                {
+                    return ip.ToString();
+                }
+            }
+
+            return "Không tìm thấy IP";
+        }
         public void StartSv()
         {
+            f = Program.form;
+
             if (!Directory.Exists(Folder))
             {
                 Directory.CreateDirectory(Folder);
             }
+            while (port > 0)
+            {
+                try
+                {
+                    f.textBox1.Text = GetLocalIPAddress();
+                    f.textBox2.Text = port.ToString();
 
-            sckSever = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-            IPEndPoint ep = new IPEndPoint(IPAddress.Any, 9999);
-            sckSever.Bind(ep);
-            sckSever.Listen(4);
+                    sckSever = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+                    IPEndPoint ep = new IPEndPoint(IPAddress.Any, port);
+                    sckSever.Bind(ep);
 
-            sckSever.BeginAccept(new AsyncCallback(OnAccept), sckSever);
+                    sckSever.Listen(4);
+
+                    sckSever.BeginAccept(new AsyncCallback(OnAccept), sckSever);
+
+                    break;
+                }
+                catch
+                {
+                    port--;
+                }
+            }
+
         }
 
         private void OnAccept(IAsyncResult ar)
         {
             Socket sck = (Socket)ar.AsyncState;
             sckClient = sck.EndAccept(ar);
+            f.label2.Text = "Đã Được Kết Nối!";
 
             sckSever.BeginAccept(new AsyncCallback(OnAccept), sckSever);
 
@@ -67,6 +103,8 @@ namespace ConsoleApp1
                 }
 
                 string fileName = parts[0];
+                f.textBox4.Text = fileName;
+
                 totalReceive = long.Parse(parts[1]);
 
                 fs = new FileStream(Path.Combine(Folder, fileName), FileMode.Create);
@@ -87,6 +125,10 @@ namespace ConsoleApp1
             {
                 fs.Write(buffer, 0, n);
                 countReceive += n;
+
+                int percent = (int)(countReceive * 100 / totalReceive);
+                f.label7.Text = percent.ToString() + "%";
+                f.progressBar2.Value = percent;
             }
 
             if (countReceive >= totalReceive)
@@ -97,6 +139,8 @@ namespace ConsoleApp1
                 isHeader = true;
                 countReceive = 0;
                 totalReceive = 0;
+
+                f.richTextBox2.Text = "Đã nhận " + f.textBox4.Text + "\n";
 
                 Console.WriteLine("Đã nhận file thành công!");
             }
