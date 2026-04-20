@@ -3,6 +3,18 @@
   "WorkspaceRootPath": "C:\\Users\\hung\\Desktop\\Csharp\\GGG\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{C461B9A7-8F23-4926-9D1D-A5D74BF3D088}|WinFormsApp1\\WinFormsApp1.csproj|c:\\users\\hung\\desktop\\csharp\\ggg\\winformsapp1\\tcpclient.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C461B9A7-8F23-4926-9D1D-A5D74BF3D088}|WinFormsApp1\\WinFormsApp1.csproj|solutionrelative:winformsapp1\\tcpclient.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C461B9A7-8F23-4926-9D1D-A5D74BF3D088}|WinFormsApp1\\WinFormsApp1.csproj|c:\\users\\hung\\desktop\\csharp\\ggg\\winformsapp1\\tcpserver.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C461B9A7-8F23-4926-9D1D-A5D74BF3D088}|WinFormsApp1\\WinFormsApp1.csproj|solutionrelative:winformsapp1\\tcpserver.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C461B9A7-8F23-4926-9D1D-A5D74BF3D088}|WinFormsApp1\\WinFormsApp1.csproj|c:\\users\\hung\\desktop\\csharp\\ggg\\winformsapp1\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C461B9A7-8F23-4926-9D1D-A5D74BF3D088}|WinFormsApp1\\WinFormsApp1.csproj|solutionrelative:winformsapp1\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\hung\\Desktop\\Csharp\\GGG\\CODE\\ConsoleApp1\\Program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:CODE\\ConsoleApp1\\Program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -25,7 +37,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 4,
+          "SelectedChildIndex": 3,
           "Children": [
             {
               "$type": "Bookmark",
@@ -37,7 +49,46 @@
             },
             {
               "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "TCPServer.cs",
+              "DocumentMoniker": "C:\\Users\\hung\\Desktop\\Csharp\\GGG\\WinFormsApp1\\TCPServer.cs",
+              "RelativeDocumentMoniker": "WinFormsApp1\\TCPServer.cs",
+              "ToolTip": "C:\\Users\\hung\\Desktop\\Csharp\\GGG\\WinFormsApp1\\TCPServer.cs",
+              "RelativeToolTip": "WinFormsApp1\\TCPServer.cs",
+              "ViewState": "AgIAAHsAAAAAAAAAAAAQwI4AAAAlAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-20T13:36:33.635Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "TCPClient.cs",
+              "DocumentMoniker": "C:\\Users\\hung\\Desktop\\Csharp\\GGG\\WinFormsApp1\\TCPClient.cs",
+              "RelativeDocumentMoniker": "WinFormsApp1\\TCPClient.cs",
+              "ToolTip": "C:\\Users\\hung\\Desktop\\Csharp\\GGG\\WinFormsApp1\\TCPClient.cs",
+              "RelativeToolTip": "WinFormsApp1\\TCPClient.cs",
+              "ViewState": "AgIAADoAAAAAAAAAAAAAAEoAAAAhAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-20T13:36:32.927Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
               "DocumentIndex": 2,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\hung\\Desktop\\Csharp\\GGG\\WinFormsApp1\\Program.cs",
+              "RelativeDocumentMoniker": "WinFormsApp1\\Program.cs",
+              "ToolTip": "C:\\Users\\hung\\Desktop\\Csharp\\GGG\\WinFormsApp1\\Program.cs",
+              "RelativeToolTip": "WinFormsApp1\\Program.cs",
+              "ViewState": "AgIAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-20T13:36:32.39Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
               "Title": "TCPServer.cs",
               "DocumentMoniker": "C:\\Users\\hung\\Desktop\\Csharp\\GGG\\CODE\\ConsoleApp1\\TCPServer.cs",
               "RelativeDocumentMoniker": "CODE\\ConsoleApp1\\TCPServer.cs",
@@ -49,7 +100,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 4,
               "Title": "TCPClient.cs",
               "DocumentMoniker": "C:\\Users\\hung\\Desktop\\Csharp\\GGG\\CODE\\ConsoleApp1\\TCPClient.cs",
               "RelativeDocumentMoniker": "CODE\\ConsoleApp1\\TCPClient.cs",
@@ -61,7 +112,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 3,
               "Title": "Program.cs",
               "DocumentMoniker": "C:\\Users\\hung\\Desktop\\Csharp\\GGG\\CODE\\ConsoleApp1\\Program.cs",
               "RelativeDocumentMoniker": "CODE\\ConsoleApp1\\Program.cs",
@@ -74,7 +125,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 6,
               "Title": "Packet.cs",
               "DocumentMoniker": "D:\\UTH 2\\CODE\\CODE\\ConsoleApp1\\Packet.cs",
               "ToolTip": "D:\\UTH 2\\CODE\\CODE\\ConsoleApp1\\Packet.cs",
