@@ -3,4 +3,5 @@
     <File Path=".gitignore" />
   </Folder>
   <Project Path="ConsoleApp1/ConsoleApp1.csproj" />
+  <Project Path="WinFormsApp1/WinFormsApp1.csproj" Id="c461b9a7-8f23-4926-9d1d-a5d74bf3d088" />
 </Solution>
