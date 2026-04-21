@@ -51,9 +51,14 @@
             textBox3 = new TextBox();
             label2 = new Label();
             label10 = new Label();
+            tabControl1 = new TabControl();
+            Send = new TabPage();
+            Queue = new TabPage();
             groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numericUpDown1).BeginInit();
             groupBox2.SuspendLayout();
+            tabControl1.SuspendLayout();
+            Send.SuspendLayout();
             SuspendLayout();
             // 
             // label1
@@ -174,7 +179,7 @@
             // textBox4
             // 
             textBox4.Font = new Font("Segoe UI", 15F);
-            textBox4.Location = new Point(559, 169);
+            textBox4.Location = new Point(527, 6);
             textBox4.Name = "textBox4";
             textBox4.ReadOnly = true;
             textBox4.Size = new Size(302, 34);
@@ -185,7 +190,7 @@
             // 
             label6.AutoSize = true;
             label6.Font = new Font("Segoe UI", 15F);
-            label6.Location = new Point(454, 172);
+            label6.Location = new Point(422, 9);
             label6.Name = "label6";
             label6.Size = new Size(99, 28);
             label6.TabIndex = 13;
@@ -195,7 +200,7 @@
             // 
             button1.Enabled = false;
             button1.Font = new Font("Segoe UI", 15F);
-            button1.Location = new Point(29, 333);
+            button1.Location = new Point(6, 157);
             button1.Name = "button1";
             button1.Size = new Size(393, 49);
             button1.TabIndex = 9;
@@ -207,7 +212,7 @@
             // 
             label7.AutoSize = true;
             label7.Font = new Font("Segoe UI", 15F);
-            label7.Location = new Point(454, 203);
+            label7.Location = new Point(422, 40);
             label7.Name = "label7";
             label7.Size = new Size(39, 28);
             label7.TabIndex = 6;
@@ -215,7 +220,7 @@
             // 
             // progressBar2
             // 
-            progressBar2.Location = new Point(521, 208);
+            progressBar2.Location = new Point(489, 45);
             progressBar2.Name = "progressBar2";
             progressBar2.Size = new Size(340, 23);
             progressBar2.TabIndex = 5;
@@ -223,9 +228,9 @@
             // richTextBox2
             // 
             richTextBox2.Font = new Font("Segoe UI", 12F);
-            richTextBox2.Location = new Point(454, 237);
+            richTextBox2.Location = new Point(422, 74);
             richTextBox2.Name = "richTextBox2";
-            richTextBox2.Size = new Size(409, 205);
+            richTextBox2.Size = new Size(409, 191);
             richTextBox2.TabIndex = 4;
             richTextBox2.Text = "";
             // 
@@ -233,7 +238,7 @@
             // 
             label8.AutoSize = true;
             label8.Font = new Font("Segoe UI", 15F);
-            label8.Location = new Point(29, 246);
+            label8.Location = new Point(6, 70);
             label8.Name = "label8";
             label8.Size = new Size(91, 28);
             label8.TabIndex = 17;
@@ -242,7 +247,7 @@
             // button3
             // 
             button3.Font = new Font("Segoe UI", 15F);
-            button3.Location = new Point(29, 182);
+            button3.Location = new Point(6, 6);
             button3.Name = "button3";
             button3.Size = new Size(393, 49);
             button3.TabIndex = 12;
@@ -253,7 +258,7 @@
             // button2
             // 
             button2.Font = new Font("Segoe UI", 15F);
-            button2.Location = new Point(29, 275);
+            button2.Location = new Point(6, 99);
             button2.Name = "button2";
             button2.Size = new Size(52, 34);
             button2.TabIndex = 11;
@@ -264,7 +269,7 @@
             // textBox3
             // 
             textBox3.Font = new Font("Segoe UI", 15F);
-            textBox3.Location = new Point(87, 275);
+            textBox3.Location = new Point(64, 99);
             textBox3.Name = "textBox3";
             textBox3.Size = new Size(335, 34);
             textBox3.TabIndex = 10;
@@ -274,7 +279,7 @@
             label2.AutoSize = true;
             label2.Font = new Font("Segoe UI", 15F);
             label2.ForeColor = Color.Fuchsia;
-            label2.Location = new Point(124, 414);
+            label2.Location = new Point(102, 237);
             label2.Name = "label2";
             label2.Size = new Size(134, 28);
             label2.TabIndex = 2;
@@ -284,32 +289,66 @@
             // 
             label10.AutoSize = true;
             label10.Font = new Font("Segoe UI", 15F);
-            label10.Location = new Point(29, 414);
+            label10.Location = new Point(7, 237);
             label10.Name = "label10";
             label10.Size = new Size(101, 28);
             label10.TabIndex = 8;
             label10.Text = "Trạng Thái";
             // 
+            // tabControl1
+            // 
+            tabControl1.Controls.Add(Send);
+            tabControl1.Controls.Add(Queue);
+            tabControl1.Font = new Font("Segoe UI", 15F);
+            tabControl1.Location = new Point(30, 172);
+            tabControl1.Name = "tabControl1";
+            tabControl1.SelectedIndex = 0;
+            tabControl1.Size = new Size(843, 311);
+            tabControl1.TabIndex = 18;
+            // 
+            // Send
+            // 
+            Send.BackColor = SystemColors.Control;
+            Send.Controls.Add(button3);
+            Send.Controls.Add(label10);
+            Send.Controls.Add(button2);
+            Send.Controls.Add(textBox3);
+            Send.Controls.Add(label2);
+            Send.Controls.Add(button1);
+            Send.Controls.Add(label8);
+            Send.Controls.Add(textBox4);
+            Send.Controls.Add(richTextBox2);
+            Send.Controls.Add(label6);
+            Send.Controls.Add(progressBar2);
+            Send.Controls.Add(label7);
+            Send.Font = new Font("Segoe UI", 15F);
+            Send.Location = new Point(4, 37);
+            Send.Name = "Send";
+            Send.Padding = new Padding(3);
+            Send.Size = new Size(835, 270);
+            Send.TabIndex = 0;
+            Send.Text = "Send";
+            // 
+            // Queue
+            // 
+            Queue.BackColor = SystemColors.Control;
+            Queue.Font = new Font("Segoe UI", 15F);
+            Queue.Location = new Point(4, 37);
+            Queue.Name = "Queue";
+            Queue.Padding = new Padding(3);
+            Queue.Size = new Size(835, 270);
+            Queue.TabIndex = 1;
+            Queue.Text = "Queue";
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(897, 470);
-            Controls.Add(label10);
+            ClientSize = new Size(896, 493);
+            Controls.Add(tabControl1);
             Controls.Add(groupBox2);
-            Controls.Add(label2);
-            Controls.Add(label8);
             Controls.Add(groupBox1);
-            Controls.Add(textBox4);
             Controls.Add(label1);
-            Controls.Add(label6);
-            Controls.Add(label7);
-            Controls.Add(button3);
-            Controls.Add(progressBar2);
-            Controls.Add(button1);
-            Controls.Add(richTextBox2);
-            Controls.Add(textBox3);
-            Controls.Add(button2);
             Name = "Form1";
             Text = "File Transfer";
             groupBox1.ResumeLayout(false);
@@ -317,6 +356,9 @@
             ((System.ComponentModel.ISupportInitialize)numericUpDown1).EndInit();
             groupBox2.ResumeLayout(false);
             groupBox2.PerformLayout();
+            tabControl1.ResumeLayout(false);
+            Send.ResumeLayout(false);
+            Send.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -346,5 +388,8 @@
         public Label label2;
         private Label label10;
         private Label label9;
+        private TabControl tabControl1;
+        private TabPage Send;
+        private TabPage Queue;
     }
 }
