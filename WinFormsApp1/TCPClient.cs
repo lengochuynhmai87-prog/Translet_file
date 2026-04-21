@@ -31,49 +31,55 @@ namespace WinFormsApp1
 
         public void SendFile(string path)
         {
-            if (sckClient == null || !sckClient.Connected)
+            try
             {
-                Console.WriteLine("Chua ket noi");
-                return;
-            }
-            
-            isSending = true;
+                if (sckClient == null || !sckClient.Connected)
+                {
+                    Console.WriteLine("Chua ket noi");
+                    return;
+                }
 
-            FileInfo fi = new FileInfo(path);
-            if (!fi.Exists)
-            {
-                Console.WriteLine("Khong tim thay file");
+                isSending = true;
+
+                FileInfo fi = new FileInfo(path);
+                if (!fi.Exists)
+                {
+                    Console.WriteLine("Khong tim thay file");
+                    isSending = false;
+                    return;
+                }
+                f.textBox4.Text = fi.Name;
+                string header = fi.Name + ";" + fi.Length + "|";
+                Console.WriteLine(header);
+
+                byte[] headerBytes = Encoding.UTF8.GetBytes(header);
+                SendAll(headerBytes, headerBytes.Length);
+
+                long totalBytes = fi.Length;
+                long sentBytes = 0;
+
+                using FileStream fs = fi.OpenRead();
+                int bytesRead;
+                while ((bytesRead = fs.Read(buffer, 0, buffer.Length)) > 0)
+                {
+                    SendAll(buffer, bytesRead);
+                    sentBytes += bytesRead;
+
+                    int percent = (int)(sentBytes * 100 / totalBytes);
+                    f.label7.Text = percent.ToString() + "%";
+                    f.progressBar2.Value = percent;
+
+
+
+                }
+
                 isSending = false;
-                return;
-            }
-            f.textBox4.Text = fi.Name;
-            string header = fi.Name + ";" + fi.Length + "|";
-            Console.WriteLine(header);
-
-            byte[] headerBytes = Encoding.UTF8.GetBytes(header);
-            SendAll(headerBytes, headerBytes.Length);
-
-            long totalBytes = fi.Length;
-            long sentBytes = 0;
-
-            using FileStream fs = fi.OpenRead();
-            int bytesRead;
-            while ((bytesRead = fs.Read(buffer, 0, buffer.Length)) > 0)
+                f.richTextBox2.Text += "Đã gửi xong " + f.textBox4.Text + "\n";
+                Console.WriteLine("gui xong");
+            }catch(Exception ex)
             {
-                SendAll(buffer, bytesRead);
-                sentBytes += bytesRead;
-
-                int percent = (int)(sentBytes * 100 / totalBytes);
-                f.label7.Text = percent.ToString() + "%";
-                f.progressBar2.Value = percent;
-
-
-
+                MessageBox.Show(ex.Message);
             }
-
-            isSending = false;
-            f.richTextBox2.Text += "Đã gửi xong " + f.textBox4.Text + "\n";
-            Console.WriteLine("gui xong");
         }
 
         private void SendAll(byte[] data, int count)

@@ -6,16 +6,23 @@ namespace WinFormsApp1
 {
     public class TCPServer
     {
-        public Socket? sckClient, sckSever;
-        public Form1 f;
-        public FileStream? fs;
-        public static int BUFFERSIZE = 65536;
+        Socket? sckSever;
         public static int port = 9999;
-        public byte[] buffer = new byte[BUFFERSIZE];
+        public Form1 f;
         public string Folder = "Receive_File";
-        public bool isHeader = true;
-        public long countReceive = 0;
-        public long totalReceive = 0;
+        public static int BUFFERSIZE = 65536;
+
+
+
+        public class ClientState
+        {
+            public Socket? sckClient;
+            public FileStream? fs;
+            public byte[] buffer = new byte[BUFFERSIZE];
+            public bool isHeader = true;
+            public long countReceive = 0;
+            public long totalReceive = 0;
+        }
 
         public static string GetLocalIPAddress()
         {
@@ -66,13 +73,16 @@ namespace WinFormsApp1
 
         private void OnAccept(IAsyncResult ar)
         {
+            ClientState st = new ClientState();
             Socket sck = (Socket)ar.AsyncState;
-            sckClient = sck.EndAccept(ar);
-            f.label2.Text = "Đã Được Kết Nối!";
-
+            st.sckClient = sck.EndAccept(ar);
+            f.Invoke(() =>
+            {
+                f.label2.Text = "Đã Được Kết Nối!";
+            });
             sckSever.BeginAccept(new AsyncCallback(OnAccept), sckSever);
-
-            sckClient.BeginReceive(buffer, 0, buffer.Length, SocketFlags.None, OnReceive, null);
+           
+            st.sckClient.BeginReceive(st.buffer, 0, st.buffer.Length, SocketFlags.None, OnReceive, st);
 
 
 
@@ -80,16 +90,17 @@ namespace WinFormsApp1
 
         private void OnReceive(IAsyncResult ar)
         {
-            int n = sckClient.EndReceive(ar);
+            ClientState st = (ClientState)ar.AsyncState;
+            int n = st.sckClient.EndReceive(ar);
             if (n <= 0) return;
 
-            if (isHeader)
+            if (st.isHeader)
             {
-                string msg = Encoding.UTF8.GetString(buffer, 0, n);
+                string msg = Encoding.UTF8.GetString(st.buffer, 0, n);
 
                 if (!msg.Contains("|"))
                 {
-                    sckClient.BeginReceive(buffer, 0, BUFFERSIZE, SocketFlags.None, OnReceive, null);
+                    st.sckClient.BeginReceive(st.buffer, 0, BUFFERSIZE, SocketFlags.None, OnReceive, st);
                     return;
                 }
 
@@ -98,16 +109,19 @@ namespace WinFormsApp1
 
                 if (parts.Length < 2)
                 {
-                    sckClient.BeginReceive(buffer, 0, BUFFERSIZE, SocketFlags.None, OnReceive, null);
+                    st.sckClient.BeginReceive(st.buffer, 0, BUFFERSIZE, SocketFlags.None, OnReceive, st);
                     return;
                 }
 
                 string fileName = parts[0];
-                f.textBox4.Text = fileName;
+                f.Invoke(() =>
+                {
+                    f.textBox4.Text = fileName;
+                });
 
-                totalReceive = long.Parse(parts[1]);
+                st.totalReceive = long.Parse(parts[1]);
 
-                fs = new FileStream(Path.Combine(Folder, fileName), FileMode.Create);
+                st.fs = new FileStream(Path.Combine(Folder, fileName), FileMode.Create);
 
                 int headerByteCount = Encoding.UTF8.GetByteCount(header[0] + "|");
 
@@ -115,37 +129,47 @@ namespace WinFormsApp1
 
                 if (fileInHeader > 0)
                 {
-                    fs.Write(buffer, headerByteCount, fileInHeader);
-                    countReceive += fileInHeader;
+                    st.fs.Write(st.buffer, headerByteCount, fileInHeader);
+                    st.countReceive += fileInHeader;
                 }
 
-                isHeader = false;
+                st.isHeader = false;
+                st.sckClient.BeginReceive(st.buffer, 0, BUFFERSIZE, SocketFlags.None, OnReceive, st);
             }
             else
             {
-                fs.Write(buffer, 0, n);
-                countReceive += n;
+                st.fs.Write(st.buffer, 0, n);
+                st.countReceive += n;
 
-                int percent = (int)(countReceive * 100 / totalReceive);
-                f.label7.Text = percent.ToString() + "%";
-                f.progressBar2.Value = percent;
+                int percent = (int)(st.countReceive * 100 / st.totalReceive);
+                f.Invoke(() =>
+                {
+                    f.label7.Text = percent.ToString() + "%";
+                    f.progressBar2.Value = percent;
+                });
             }
-
-            if (countReceive >= totalReceive)
+            if (st.countReceive < st.totalReceive)
             {
-                fs.Close();
-                fs = null;
+                
+                st.sckClient.BeginReceive(st.buffer, 0, BUFFERSIZE, SocketFlags.None, OnReceive, st);
+            }
+            else 
+            {
+                st.fs.Close();
+                st.fs = null;
 
-                isHeader = true;
-                countReceive = 0;
-                totalReceive = 0;
-
-                f.richTextBox2.Text += "Đã nhận " + f.textBox4.Text + "\n";
+                st.isHeader = true;
+                st.countReceive = 0;
+                st.totalReceive = 0;
+                f.Invoke(() =>
+                {
+                    f.richTextBox2.Text += "Đã nhận " + f.textBox4.Text + "\n";
+                });
 
                 Console.WriteLine("Đã nhận file thành công!");
             }
 
-            sckClient.BeginReceive(buffer, 0, BUFFERSIZE, SocketFlags.None, OnReceive, null);
+            
         }
     }
 }
