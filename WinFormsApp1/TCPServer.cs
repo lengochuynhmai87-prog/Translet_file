@@ -20,7 +20,7 @@ namespace WinFormsApp1
             public FileStream? fs;
             public byte[] buffer = new byte[BUFFERSIZE];
             public bool isHeader = true;
-            public long countReceive = 0;
+            public long countReceive = 0; // đếm số byte đã nhận được của file hiện tại
             public long totalReceive = 0;
         }
 
@@ -84,7 +84,7 @@ namespace WinFormsApp1
            
             st.sckClient.BeginReceive(st.buffer, 0, st.buffer.Length, SocketFlags.None, OnReceive, st);
 
-
+              
 
         }
 
@@ -93,53 +93,65 @@ namespace WinFormsApp1
             ClientState st = (ClientState)ar.AsyncState;
             int n = st.sckClient.EndReceive(ar);
             if (n <= 0) return;
-
+            // Trường hợp header
             if (st.isHeader)
             {
-                string msg = Encoding.UTF8.GetString(st.buffer, 0, n);
-
-                if (!msg.Contains("|"))
+                try
                 {
+                    // Đọc header để lấy tên file và kích thước
+                    string msg = Encoding.UTF8.GetString(st.buffer, 0, n);
+                    if (!msg.Contains("|") || !msg.Contains(";"))
+                    {
+                        st.sckClient.BeginReceive(st.buffer, 0, BUFFERSIZE, SocketFlags.None, OnReceive, st);
+                        return;
+                    }
+
+                    string[] header = msg.Split('|');
+                    string[] parts = header[0].Split(';');
+
+
+                    string fileName = parts[0];
+                    f.Invoke(() =>
+                    {
+                        f.txtFilename.Text = fileName;
+                    });
+
+                    st.totalReceive = long.Parse(parts[1]);
+                    // Tạo file để lưu dữ liệu nhận được
+                    st.fs = new FileStream(Path.Combine(Folder, fileName), FileMode.Create);
+
+                    f.Invoke(() =>
+                    {
+                        f.txtFilename.Text = fileName;
+                        f.progressBar2.Value = 0;
+                        f.label7.Text = "0%";
+                    });
+
+                    // Tính số byte của phần header đã nhận ( không tính số byte của file)
+                    int headerByteCount = Encoding.UTF8.GetByteCount(header[0] + "|");
+                    int fileInHeader = n - headerByteCount; // số byte của file đã nhận trong phần header
+
+                    if (fileInHeader > 0)
+                    {
+                        st.fs.Write(st.buffer, headerByteCount, fileInHeader);
+                        st.countReceive += fileInHeader;
+                    }
+
+                    st.isHeader = false;
                     st.sckClient.BeginReceive(st.buffer, 0, BUFFERSIZE, SocketFlags.None, OnReceive, st);
-                    return;
-                }
-
-                string[] header = msg.Split('|');
-                string[] parts = header[0].Split(';');
-
-                if (parts.Length < 2)
+                }catch (Exception ex)
                 {
-                    st.sckClient.BeginReceive(st.buffer, 0, BUFFERSIZE, SocketFlags.None, OnReceive, st);
-                    return;
+                    MessageBox.Show(ex.Message);
                 }
-
-                string fileName = parts[0];
-                f.Invoke(() =>
-                {
-                    f.textBox4.Text = fileName;
-                });
-
-                st.totalReceive = long.Parse(parts[1]);
-
-                st.fs = new FileStream(Path.Combine(Folder, fileName), FileMode.Create);
-
-                int headerByteCount = Encoding.UTF8.GetByteCount(header[0] + "|");
-
-                int fileInHeader = n - headerByteCount;
-
-                if (fileInHeader > 0)
-                {
-                    st.fs.Write(st.buffer, headerByteCount, fileInHeader);
-                    st.countReceive += fileInHeader;
-                }
-
-                st.isHeader = false;
-                st.sckClient.BeginReceive(st.buffer, 0, BUFFERSIZE, SocketFlags.None, OnReceive, st);
             }
+            // nếu đã nhận header rồi thì tiếp tục nhận phần file
             else
             {
-                st.fs.Write(st.buffer, 0, n);
-                st.countReceive += n;
+                //tính số byte còn lại cần nhận
+                long  remaining = st.totalReceive - st.countReceive;
+                int belongCurrentFile = (int)Math.Min(remaining, n);
+                st.fs.Write(st.buffer, 0, belongCurrentFile);
+                st.countReceive += belongCurrentFile;
 
                 int percent = (int)(st.countReceive * 100 / st.totalReceive);
                 f.Invoke(() =>
@@ -148,6 +160,7 @@ namespace WinFormsApp1
                     f.progressBar2.Value = percent;
                 });
             }
+            // nếu chưa nhận đủ file thì tiếp tục nhận
             if (st.countReceive < st.totalReceive)
             {
                 
@@ -155,19 +168,19 @@ namespace WinFormsApp1
             }
             else 
             {
-                st.fs.Close();
-                st.fs = null;
-
+                st.fs?.Close();
+                st.fs = null;                                
                 st.isHeader = true;
                 st.countReceive = 0;
                 st.totalReceive = 0;
                 f.Invoke(() =>
                 {
-                    f.richTextBox2.Text += "Đã nhận " + f.textBox4.Text + "\n";
+                    f.richTextBox2.Text += "Đã nhận " + f.txtFilename.Text + "\n";
                 });
-
+                st.sckClient.BeginReceive(st.buffer, 0, BUFFERSIZE, SocketFlags.None, OnReceive, st);
                 Console.WriteLine("Đã nhận file thành công!");
             }
+
 
             
         }

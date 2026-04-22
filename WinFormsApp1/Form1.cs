@@ -21,33 +21,40 @@ namespace WinFormsApp1
 
             ofd.Title = "Chọn file";
             ofd.Filter = "All files (*.*)|*.*";
+            ofd.Multiselect = true;
 
             if (ofd.ShowDialog() == DialogResult.OK)
             {
-                string filePath = ofd.FileName;
-                textBox3.Text = filePath;
+                foreach (string filePath in ofd.FileNames)
+                {
+                    if (!listBox1.Items.Contains(filePath))
+                    {
+                        listBox1.Items.Add(filePath);
+                    }
+                    textBox3.Text = filePath;
+
+                }
             }
         }
 
-        private void button3_Click(object sender, EventArgs e)
+        private void btnConnect_Click(object sender, EventArgs e)
         {
             if (tcpClient.sckClient == null)
             {
-                tcpClient.Start(comboBox1.Text, (int)numericUpDown1.Value);
-                button3.Enabled = false;
-                button1.Enabled = true;
+                tcpClient.Start(remoteIP.Text, (int)remotePort.Value);
+                btnConnect.Enabled = false;
+                btnSend.Enabled = true;
 
             }
 
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void btnSend_Click(object sender, EventArgs e)
         {
-            if (tcpClient.isSending) return;
-            Task.Run(() =>
-            {
-                tcpClient.SendFile(textBox3.Text);
-            });
+            if(tcpClient.isSending) return;
+            tcpClient.GetPathFormList();
         }
+
+          
     }
 }

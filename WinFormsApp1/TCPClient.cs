@@ -1,6 +1,7 @@
 using System.Net;
 using System.Net.Sockets;
 using System.Reflection.Emit;
+using System.Security.Cryptography;
 using System.Text;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
@@ -13,6 +14,44 @@ namespace WinFormsApp1
         public static int BUFFERSIZE = 65536;
         public byte[] buffer = new byte[BUFFERSIZE];
         public bool isSending = false;
+        private Thread thread;
+
+        public void GetPathFormList()
+        {
+            if(isSending) return;
+            isSending = true;
+            thread = new Thread(HandlePath);
+            thread.Start();
+
+        }
+
+        private void HandlePath(object? obj)
+        {
+            while (true)
+            {
+                string path = "";
+                f.Invoke(() =>
+                {
+                    if (f.listBox1.Items.Count > 0)
+                    {
+                        path = f.listBox1.Items[0].ToString();
+                    }
+                });
+                if (string.IsNullOrEmpty(path)) break;
+
+                SendFile(path);
+
+                f.Invoke(() =>
+                {
+                    
+                    f.listBox1.Items.RemoveAt(0);
+                });
+
+                Thread.Sleep(1000);
+            }
+            isSending = false;
+            
+        }
 
         public void Start(string ip, int port)
         {
@@ -39,16 +78,19 @@ namespace WinFormsApp1
                     return;
                 }
 
-                isSending = true;
+                //isSending = true;
 
                 FileInfo fi = new FileInfo(path);
                 if (!fi.Exists)
                 {
                     Console.WriteLine("Khong tim thay file");
-                    isSending = false;
+                    //isSending = false;
                     return;
                 }
-                f.textBox4.Text = fi.Name;
+                f.Invoke(() =>
+                {
+                    f.txtFilename.Text = fi.Name;
+                });
                 string header = fi.Name + ";" + fi.Length + "|";
                 Console.WriteLine(header);
 
@@ -66,17 +108,23 @@ namespace WinFormsApp1
                     sentBytes += bytesRead;
 
                     int percent = (int)(sentBytes * 100 / totalBytes);
-                    f.label7.Text = percent.ToString() + "%";
-                    f.progressBar2.Value = percent;
-
+                    f.Invoke(() =>
+                    {
+                        f.label7.Text = percent.ToString() + "%";
+                        f.progressBar2.Value = percent;
+                    });
 
 
                 }
 
-                isSending = false;
-                f.richTextBox2.Text += "Đã gửi xong " + f.textBox4.Text + "\n";
+                //isSending = false;
+                f.Invoke(() =>
+                {
+                    f.richTextBox2.Text += "Đã gửi xong " + f.txtFilename.Text + "\n";
+                });
                 Console.WriteLine("gui xong");
-            }catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
             }
@@ -91,5 +139,6 @@ namespace WinFormsApp1
                 totalSent += sent;
             }
         }
+        
     }
 }
